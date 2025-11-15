@@ -20,7 +20,30 @@ const financialRoutes = require('./routes/financial.routes');
 const app = express();
 
 // Middlewares
-app.use(cors());
+// Configure CORS to allow requests from the frontend(s).
+// You can set BACKEND_ALLOWED_ORIGINS in backend/.env as a comma-separated list
+// e.g. BACKEND_ALLOWED_ORIGINS="http://localhost:3000,https://your-frontend.vercel.app"
+const allowedOrigins = new Set((process.env.BACKEND_ALLOWED_ORIGINS || '*').split(',').map(s => s.trim()).filter(Boolean));
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow non-browser requests (like server-side or tools) when origin is undefined
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.has('*') || allowedOrigins.has(origin)) {
+      return callback(null, true);
+    }
+    console.warn(`CORS blocked for origin: ${origin}`);
+    return callback(new Error('Not allowed by CORS'), false);
+  },
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+// Ensure preflight requests are handled
+app.options('*', cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
