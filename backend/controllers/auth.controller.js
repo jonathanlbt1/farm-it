@@ -42,7 +42,12 @@ exports.register = async (req, res) => {
     });
   } catch (error) {
     console.error('Erro no registro:', error);
-    res.status(500).json({ error: 'Erro ao registrar usuário.' });
+    // In production we avoid leaking internal error details. For debugging in staging,
+    // set SHOW_ERRORS=true in the environment to include the error message in the response.
+    const showDetail = process.env.SHOW_ERRORS === 'true';
+    const payload = { error: 'Erro ao registrar usuário.' };
+    if (showDetail) payload.detail = error.message || String(error);
+    res.status(500).json(payload);
   }
 };
 
