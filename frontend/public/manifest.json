@@ -1,0 +1,23 @@
+{
+  "short_name": "Farm-IT",
+  "name": "Farm-IT - Gestao Pecuaria Sustentavel",
+  "description": "Sistema de gestao sustentavel para propriedades pecuarias",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2e7d32",
+  "background_color": "#f4fff5"
+}

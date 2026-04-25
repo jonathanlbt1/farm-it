@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Farm-IT maskable icon">
+  <rect width="1024" height="1024" fill="#1b5e20"/>
+  <rect x="128" y="128" width="768" height="768" rx="180" fill="#2e7d32"/>
+  <path fill="#dcedc8" d="M286 646c96-16 204-94 244-186 32-72 100-126 190-150-44 50-70 118-68 188 54-34 114-52 178-52-70 74-112 180-114 288H286v-88z"/>
+  <path fill="#ffffff" d="M378 736h268v48H378z"/>
+  <circle cx="614" cy="386" r="42" fill="#ffffff"/>
+</svg>
