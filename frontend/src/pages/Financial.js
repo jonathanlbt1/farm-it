@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import { financialService } from '../services/api';
@@ -21,11 +21,7 @@ const Financial = () => {
     notes: '',
   });
 
-  useEffect(() => {
-    loadData();
-  }, [filter]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const params = filter !== 'all' ? { type: filter } : {};
       const [transactionsRes, reportRes] = await Promise.all([
@@ -39,7 +35,11 @@ const Financial = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

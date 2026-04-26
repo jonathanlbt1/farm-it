@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import { animalsService } from '../services/api';
@@ -21,11 +21,7 @@ const Animals = () => {
     notes: '',
   });
 
-  useEffect(() => {
-    loadAnimals();
-  }, [filter]);
-
-  const loadAnimals = async () => {
+  const loadAnimals = useCallback(async () => {
     try {
       const params = filter !== 'all' ? { type: filter } : {};
       const response = await animalsService.getAll(params);
@@ -35,7 +31,11 @@ const Animals = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    loadAnimals();
+  }, [loadAnimals]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

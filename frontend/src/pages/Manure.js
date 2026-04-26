@@ -5,7 +5,6 @@ import { manureService } from '../services/api';
 import './Common.css';
 
 const Manure = () => {
-  const [activeTab, setActiveTab] = useState('sales');
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
