@@ -36,16 +36,19 @@ jobs:
         shell: bash
         env:
           REGISTRY_URL: ${{ secrets.FARMIT_REGISTRY_URL }}
+          ACR_NAME: ${{ secrets.FARMIT_ACR_NAME }}
         run: |
           set -e
-          if [ -z "$REGISTRY_URL" ]; then
-            echo "FARMIT_REGISTRY_URL is empty. Set it to your ACR login server (example: myregistry.azurecr.io)."
+          if [ -n "$REGISTRY_URL" ]; then
+            registry_host="${REGISTRY_URL#http://}"
+            registry_host="${registry_host#https://}"
+            registry_host="${registry_host%/}"
+          elif [ -n "$ACR_NAME" ]; then
+            registry_host="${ACR_NAME}.azurecr.io"
+          else
+            echo "Registry is not configured. Set FARMIT_REGISTRY_URL (example: myregistry.azurecr.io) or FARMIT_ACR_NAME (example: myregistry)."
             exit 1
           fi
-
-          registry_host="${REGISTRY_URL#http://}"
-          registry_host="${registry_host#https://}"
-          registry_host="${registry_host%/}"
 
           if [ -z "$registry_host" ]; then
             echo "FARMIT_REGISTRY_URL is invalid after normalization."
