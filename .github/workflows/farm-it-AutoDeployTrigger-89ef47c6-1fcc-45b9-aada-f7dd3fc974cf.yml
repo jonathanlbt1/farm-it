@@ -31,17 +31,40 @@ jobs:
           tenant-id: ${{ secrets.FARMIT_AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.FARMIT_AZURE_SUBSCRIPTION_ID }}
 
+      - name: Validate registry configuration
+        id: registry
+        shell: bash
+        env:
+          REGISTRY_URL: ${{ secrets.FARMIT_REGISTRY_URL }}
+        run: |
+          set -e
+          if [ -z "$REGISTRY_URL" ]; then
+            echo "FARMIT_REGISTRY_URL is empty. Set it to your ACR login server (example: myregistry.azurecr.io)."
+            exit 1
+          fi
+
+          registry_host="${REGISTRY_URL#http://}"
+          registry_host="${registry_host#https://}"
+          registry_host="${registry_host%/}"
+
+          if [ -z "$registry_host" ]; then
+            echo "FARMIT_REGISTRY_URL is invalid after normalization."
+            exit 1
+          fi
+
+          echo "registry_host=$registry_host" >> "$GITHUB_OUTPUT"
+
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
           appSourcePath: ${{ github.workspace }}/backend
           dockerfilePath: Dockerfile
-          registryUrl: ${{ secrets.FARMIT_REGISTRY_URL }}
+          registryUrl: ${{ steps.registry.outputs.registry_host }}
           registryUsername: ${{ secrets.FARMIT_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.FARMIT_REGISTRY_PASSWORD }}
           containerAppName: farm-it
           resourceGroup: farm-it
-          imageToBuild: ${{ secrets.FARMIT_REGISTRY_URL }}/farm-it-backend:${{ github.sha }}
-          imageToDeploy: ${{ secrets.FARMIT_REGISTRY_URL }}/farm-it-backend:${{ github.sha }}
+          imageToBuild: ${{ steps.registry.outputs.registry_host }}/farm-it-backend:${{ github.sha }}
+          imageToDeploy: ${{ steps.registry.outputs.registry_host }}/farm-it-backend:${{ github.sha }}
 
 
