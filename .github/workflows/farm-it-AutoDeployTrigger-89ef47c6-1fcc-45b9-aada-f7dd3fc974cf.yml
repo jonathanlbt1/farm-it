@@ -2,12 +2,12 @@ name: Trigger auto deployment for farm-it
 
 # When this action will be executed
 on:
-  # Automatically trigger it when detected changes in repo
+  # Automatically trigger it when detected changes in backend
   push:
     branches: 
       [ main ]
     paths:
-    - '**'
+    - 'backend/**'
     - '.github/workflows/farm-it-AutoDeployTrigger-89ef47c6-1fcc-45b9-aada-f7dd3fc974cf.yml'
 
   # Allow manual trigger 
@@ -34,7 +34,7 @@ jobs:
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }}
+          appSourcePath: ${{ github.workspace }}/backend
           _dockerfilePathKey_: _dockerfilePath_
           _targetLabelKey_: _targetLabel_
           registryUrl: 
