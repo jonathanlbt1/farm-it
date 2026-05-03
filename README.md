@@ -320,7 +320,7 @@ Este projeto está sob a licença **ISC**.
 
 ## 🆘 Suporte
 
-Encontrou algum problema? Veja nossa documentação:
+Encontrou algum problema? Leia nossa documentação:
 
 - 📖 [Guia de Instalação](SETUP.md)
 - 💡 [Guia de Uso](USAGE_GUIDE.md)
